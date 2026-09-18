@@ -1,0 +1,214 @@
+# Backend Integration Report
+
+## Overview
+This document outlines the integration points for the "SafeSecure" GovTech application. It details the frontend components that require backend data, the expected API endpoints, and the data structures needed.
+
+**Note to Backend Team:**
+- All frontend code contains comments starting with `// BACKEND INTEGRATION:` to guide you to the exact lines requiring changes.
+- Mock data generators are currently in place and should be replaced with API calls.
+- Authentication tokens (JWT) should be stored in `localStorage` as `authToken`.
+
+---
+
+## 1. Authentication Module
+
+### Login Page
+- **File:** [src/pages/auth/LoginPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/LoginPage.jsx)
+- **Action:** User Login
+- **Endpoint:** `POST /api/auth/login`
+- **Payload:**
+  ```json
+  {
+    "username": "officer@gov.in",
+    "password": "password123",
+    "role": "officer"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "requiresOTP": true,
+    "userId": "user_12345"
+  }
+  ```
+
+### OTP Verification
+- **File:** [src/pages/auth/OTPPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/OTPPage.jsx)
+- **Action:** Verify OTP
+- **Endpoint:** `POST /api/auth/verify`
+- **Payload:**
+  ```json
+  {
+    "userId": "user_12345",
+    "otp": "123456"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "role": "officer",
+    "token": "jwt_token_string"
+  }
+  ```
+
+### Resend OTP
+- **File:** [src/pages/auth/OTPPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/OTPPage.jsx)
+- **Action:** Resend OTP
+- **Endpoint:** `POST /api/auth/resend-otp`
+- **Payload:** `{ "userId": "user_12345" }`
+
+---
+
+## 2. Officer Dashboard
+
+### Main Dashboard
+- **File:** [src/pages/officer/OfficerDashboard.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/OfficerDashboard.jsx)
+- **Description:** Container for dashboard widgets. Data fetching happens in child components.
+
+### KPI Stats
+- **Component:** [src/components/dashboard/DashboardStats.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/components/dashboard/DashboardStats.jsx)
+- **Endpoint:** `GET /api/dashboard/stats`
+- **Response:**
+  ```json
+  {
+    "totalScans": 1250,
+    "complianceRate": 85.5,
+    "pendingActions": 12,
+    "criticalIssues": 3
+  }
+  ```
+
+### Compliance Heatmap
+- **Component:** [src/components/dashboard/heatmap/ComplianceHeatmap.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/components/dashboard/heatmap/ComplianceHeatmap.jsx)
+- **Endpoint:** `GET /api/dashboard/heatmap`
+- **Response:**
+  ```json
+  [
+    { "state": "Maharashtra", "score": 78, "status": "Medium" },
+    { "state": "Karnataka", "score": 92, "status": "High" }
+  ]
+  ```
+
+---
+
+## 3. Scan Product Module
+
+### Scan Product Page
+- **File:** [src/pages/officer/ScanProductPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/ScanProductPage.jsx)
+
+### AI Compliance Analysis
+- **Action:** Analyze scanned product image/barcode
+- **Endpoint:** `POST /api/scan/analyze`
+- **Payload:**
+  ```json
+  {
+    "image": "base64_image_string",
+    "barcode": "8901234567890"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "status": "Non-Compliant",
+    "confidence": 0.87,
+    "issues": ["Missing Country of Origin", "Incorrect MRP Format"],
+    "extractedData": {
+      "productName": "Example Product",
+      "mrp": "500"
+    }
+  }
+  ```
+
+### Save Scan Record
+- **Action:** Save scan result (Sync)
+- **Endpoint:** `POST /api/scan/save`
+- **Payload:**
+  ```json
+  {
+    "scanData": { ... },
+    "complianceResult": { ... },
+    "officerId": "OFF-2025-001",
+    "location": { "lat": 12.97, "lng": 77.59 },
+    "timestamp": "2024-11-28T10:30:00Z"
+  }
+  ```
+
+---
+
+## 4. Report Generation (Violation Records)
+
+### Report Page
+- **File:** [src/pages/officer/ReportGenerationPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/ReportGenerationPage.jsx)
+
+### Fetch Violations
+- **Action:** Load violation records table
+- **Endpoint:** `GET /api/violations`
+- **Params:** `?page=1&limit=10&search=query&platform=Amazon&risk=High`
+- **Response:**
+  ```json
+  {
+    "data": [
+      {
+        "id": "VR-2024-001",
+        "productName": "LED Bulb",
+        "company": "BrightLights",
+        "platform": "Amazon",
+        "type": "Missing MRP",
+        "risk": "High",
+        "date": "2024-11-15",
+        "rulesApplied": ["PCR Rule 6(1)(e)"]
+      }
+    ],
+    "total": 50,
+    "page": 1
+  }
+  ```
+
+### Real-time Updates
+- **Action:** Receive new violations live
+- **Mechanism:** WebSocket or Polling
+- **Event:** `violation:new`
+- **Payload:** Single violation object (same structure as above)
+
+### Export Report
+- **Action:** Download CSV/PDF
+- **Endpoint:** `GET /api/violations/export`
+- **Params:** `?format=csv&filter=...`
+
+---
+
+## 5. Platform Analytics
+
+### Analytics Page
+- **File:** [src/pages/officer/PlatformAnalyticsPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/PlatformAnalyticsPage.jsx)
+- **Component:** [src/components/dashboard/PlatformAnalytics.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/components/dashboard/PlatformAnalytics.jsx)
+- **Endpoint:** `GET /api/analytics/platforms`
+- **Response:**
+  ```json
+  {
+    "amazon": { "complianceScore": 88, "violations": 120 },
+    "flipkart": { "complianceScore": 92, "violations": 85 },
+    "myntra": { "complianceScore": 95, "violations": 40 },
+    "jiomart": { "complianceScore": 80, "violations": 150 }
+  }
+  ```
+
+### Scraper Configuration
+- **Component:** [src/components/dashboard/ScanningConfiguration.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/components/dashboard/ScanningConfiguration.jsx)
+- **Action:** Update scraper settings
+- **Endpoint:** `POST /api/config/scraper`
+- **Payload:** `{ "targetUrl": "...", "frequency": "daily" }`
+
+---
+
+## Summary of Key Files
+| Feature | File Path |
+| :--- | :--- |
+| **Login** | [src/pages/auth/LoginPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/LoginPage.jsx) |
+| **OTP** | [src/pages/auth/OTPPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/OTPPage.jsx) |
+| **Dashboard** | [src/pages/officer/OfficerDashboard.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/OfficerDashboard.jsx) |
+| **Scanning** | [src/pages/officer/ScanProductPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/ScanProductPage.jsx) |
+| **Reports** | [src/pages/officer/ReportGenerationPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/ReportGenerationPage.jsx) |
+| **Analytics** | [src/pages/officer/PlatformAnalyticsPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/PlatformAnalyticsPage.jsx) |
