@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RoleNavigation from './RoleNavigation';
 import UserMenu from './UserMenu';
+import logocartImg from '../../img/logocart.png';
 
 const Header = ({ role, loading = false }) => {
     const [user, setUser] = useState(null);
@@ -72,8 +73,8 @@ const Header = ({ role, loading = false }) => {
                         {/* Logo and Brand */}
                         <div className="flex items-center gap-2 tablet8:gap-3 flex-shrink-0">
                             <img
-                                src="/src/img/logocart.png"
-                                alt="ClearTag"
+                                src={logocartImg}
+                                alt="Legal Metrology"
                                 className="h-8 tablet8:h-10 w-auto object-contain"
                             />
                             <div className="hidden tablet8:block">

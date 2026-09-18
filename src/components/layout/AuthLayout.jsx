@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
+import logoImg from '../../img/Logo.png';
 
 const AuthLayout = ({ children, title, subtitle }) => {
     const { theme, toggleTheme } = useTheme();
@@ -28,8 +29,8 @@ const AuthLayout = ({ children, title, subtitle }) => {
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center mb-4">
                         <img
-                            src="/src/img/Logo.png"
-                            alt="ClearTag Logo"
+                            src={logoImg}
+                            alt="Legal Metrology Logo"
                             className="w-32 h-32 tablet8:w-40 tablet8:h-40 object-contain"
                         />
                     </div>
