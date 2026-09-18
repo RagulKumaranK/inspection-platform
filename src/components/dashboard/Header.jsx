@@ -6,14 +6,42 @@ import logocartImg from '../../img/logocart.png';
 const Header = ({ role, loading = false }) => {
     const [user, setUser] = useState(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [deferredPrompt, setDeferredPrompt] = useState(null);
+    const [isAppInstalled, setIsAppInstalled] = useState(false);
 
     useEffect(() => {
-        // {/* BACKEND: GET /auth/current-user */}
-        // {/* Response: { id, name, email, role, avatar } */}
+        const handleBeforeInstallPrompt = (e) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
 
+        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            setIsAppInstalled(true);
+        }
+
+        return () => {
+            window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        };
+    }, []);
+
+    const handleInstallApp = async () => {
+        if (!deferredPrompt) {
+            alert('To install this app:\n• Chrome/Edge Desktop: Click the Install icon in the address bar\n• Mobile (Android/iOS): Tap "Add to Home Screen" in browser menu.');
+            return;
+        }
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            setIsAppInstalled(true);
+        }
+        setDeferredPrompt(null);
+    };
+
+    useEffect(() => {
         // Simulated user data - replace with actual API call
         const fetchUser = async () => {
-            // Simulate API delay
             await new Promise(resolve => setTimeout(resolve, 500));
 
             const mockUser = {
@@ -95,8 +123,20 @@ const Header = ({ role, loading = false }) => {
                         </div>
                     </div>
 
-                    {/* Right Side: User Menu */}
+                    {/* Right Side: Install App & User Menu */}
                     <div className="flex items-center gap-2 tablet8:gap-3 flex-shrink-0 ml-2 tablet8:ml-4">
+                        {!isAppInstalled && (
+                            <button
+                                onClick={handleInstallApp}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-all shadow-2xs"
+                                title="Install Legal Metrology as a Standalone App"
+                            >
+                                <svg className="w-4 h-4 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                <span className="hidden sm:inline">Install App</span>
+                            </button>
+                        )}
                         <UserMenu user={user} role={role} />
                     </div>
                 </div>
