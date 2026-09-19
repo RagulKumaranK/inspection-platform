@@ -102,17 +102,17 @@ const Header = ({ role, loading = false }) => {
                         <div className="flex items-center gap-2 tablet8:gap-3 flex-shrink-0">
                             <img
                                 src={logocartImg}
-                                alt="Legal Metrology"
+                                alt="Compliance Inspector"
                                 className="h-8 tablet8:h-10 w-auto object-contain"
                             />
                             <div className="hidden tablet8:block">
                                 <h1 className="text-base tablet8:text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">
                                     {/* i18n: translate('app.name') */}
-                                    Legal Metrology
+                                    Compliance
                                 </h1>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 leading-tight">
                                     {/* i18n: translate('app.tagline') */}
-                                    Compliance System
+                                    Inspection System
                                 </p>
                             </div>
                         </div>
@@ -129,7 +129,7 @@ const Header = ({ role, loading = false }) => {
                             <button
                                 onClick={handleInstallApp}
                                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 hover:bg-primary-100 dark:hover:bg-primary-900/60 transition-all shadow-2xs"
-                                title="Install Legal Metrology as a Standalone App"
+                                title="Install Compliance Platform as a Standalone App"
                             >
                                 <svg className="w-4 h-4 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

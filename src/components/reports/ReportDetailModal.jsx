@@ -64,7 +64,7 @@ const ReportDetailModal = ({ report, onClose, onDownload }) => {
                                 {getStatusBadge()}
                             </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                                Directorate of Legal Metrology • Government of India Audit Record
+                                Product Compliance Inspection Authority • Audit Certificate
                             </p>
                         </div>
                     </div>
@@ -289,7 +289,7 @@ const ReportDetailModal = ({ report, onClose, onDownload }) => {
                                     <span>Verifiable Audit QR Code</span>
                                 </span>
                                 <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-snug">
-                                    Scan with legal metrology inspector portal to verify digital authenticity.
+                                    Scan with compliance inspector portal to verify digital authenticity.
                                 </p>
                                 <span className="text-[10px] font-mono text-primary-600 dark:text-primary-400 block truncate">
                                     {report.verificationQrCode}

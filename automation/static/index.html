@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Control Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- HEADER -->
+        <div class="lg:col-span-3 flex justify-between items-center mb-4">
+            <div>
+                <h1
+                    class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                    Automation Control Center</h1>
+                <p class="text-gray-400 text-sm mt-1">Manage and monitor your scraping agents</p>
+            </div>
+            <div id="status-badge"
+                class="px-4 py-2 rounded-full text-sm font-semibold bg-gray-800 text-gray-400 border border-gray-700">
+                System Idle
+            </div>
+        </div>
+
+        <!-- LEFT COLUMN: CONTROLS & STATS -->
+        <div class="lg:col-span-1 space-y-6">
+
+            <!-- CONTROL PANEL -->
+            <div class="glass rounded-xl p-6 shadow-lg">
+                <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
+                        </path>
+                    </svg>
+                    Configuration
+                </h2>
+
+                <!-- Mode Selection -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Operation Mode</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setMode('existing')" id="btn-existing"
+                            class="mode-btn px-3 py-2 rounded-lg text-sm bg-blue-600 text-white border border-blue-500 transition-all">Existing</button>
+                        <button onclick="setMode('new')" id="btn-new"
+                            class="mode-btn px-3 py-2 rounded-lg text-sm bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-700 transition-all">New</button>
+                        <button onclick="setMode('batch')" id="btn-batch"
+                            class="mode-btn px-3 py-2 rounded-lg text-sm bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-700 transition-all">Batch</button>
+                    </div>
+                </div>
+
+                <!-- Dynamic Inputs -->
+                <div id="config-inputs" class="space-y-4">
+                    <!-- Site & Category (Hidden for Batch) -->
+                    <div id="single-site-inputs">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Target Site</label>
+                            <select id="site-select"
+                                class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option value="amazon">Amazon</option>
+                                <option value="flipkart">Flipkart</option>
+                                <option value="jiomart">JioMart</option>
+                                <option value="myntra">Myntra</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Category</label>
+                            <select id="category-select"
+                                class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                                <!-- Populated via JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Count Input -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2" id="count-label">Target
+                            Count</label>
+                        <input type="number" id="target-count" value="100"
+                            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="mt-8 grid grid-cols-2 gap-4">
+                    <button onclick="startScraper()" id="start-btn"
+                        class="w-full py-3 rounded-lg font-bold bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 transition-all flex justify-center items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        START
+                    </button>
+                    <button onclick="stopScraper()" id="stop-btn" disabled
+                        class="w-full py-3 rounded-lg font-bold bg-red-900/50 text-gray-500 cursor-not-allowed border border-red-900/30 transition-all flex justify-center items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path>
+                        </svg>
+                        STOP
+                    </button>
+                </div>
+            </div>
+
+            <!-- Platform Stats -->
+            <div class="glass rounded-xl p-6 shadow-lg">
+                <h3 class="text-sm font-medium text-gray-400 mb-4">Platform Breakdown</h3>
+                <div id="platform-stats" class="space-y-3">
+                    <!-- Populated via JS -->
+                    <div class="text-center text-gray-500 text-sm">Loading...</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: TERMINAL & CHARTS -->
+        <div class="lg:col-span-2 space-y-6">
+
+            <!-- TOP ROW: MINI STATS & CHART -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Mini Stats -->
+                <div class="glass rounded-xl p-6 shadow-lg flex flex-col justify-center">
+                    <h3 class="text-sm font-medium text-gray-400 mb-4">Global Overview</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+                            <div class="text-3xl font-bold text-white" id="stat-total">0</div>
+                            <div class="text-xs text-gray-400 mt-1">Total Scanned</div>
+                        </div>
+                        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+                            <div class="text-3xl font-bold text-green-400" id="stat-new">0</div>
+                            <div class="text-xs text-gray-400 mt-1">New Items</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Chart -->
+                <div class="glass rounded-xl p-6 shadow-lg">
+                    <h3 class="text-sm font-medium text-gray-400 mb-2">Category Distribution</h3>
+                    <div class="h-48 relative">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TERMINAL OUTPUT -->
+            <div class="glass rounded-xl flex flex-col h-[400px] shadow-lg overflow-hidden border border-gray-700">
+                <div class="bg-gray-800 px-4 py-3 border-b border-gray-700 flex justify-between items-center">
+                    <span class="text-sm font-mono text-gray-300 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        Live Terminal Output
+                    </span>
+                    <button onclick="clearLogs()" class="text-xs text-gray-500 hover:text-white">Clear</button>
+                </div>
+                <div id="terminal-output"
+                    class="flex-1 bg-black p-4 font-mono text-sm text-green-400 overflow-y-auto whitespace-pre-wrap">
+                    <span class="text-gray-600">Waiting for command...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'existing';
+        let isRunning = false;
+        let logInterval = null;
+        let statsInterval = null;
+        let categoryChart = null;
+
+        // --- Configuration Logic ---
+        const categories = {
+            "amazon": ["groc", "beauty", "home", "elec", "fashion"],
+            "flipkart": ["groc", "beauty", "home", "elec", "fashion"],
+            "jiomart": ["groc", "beauty", "home", "dairy", "care"],
+            "myntra": ["gourmet", "skin", "makeup", "hair", "frag"]
+        };
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-500');
+                btn.classList.add('bg-gray-800', 'text-gray-400', 'border-gray-700');
+            });
+            const activeBtn = document.getElementById(`btn-${mode}`);
+            activeBtn.classList.remove('bg-gray-800', 'text-gray-400', 'border-gray-700');
+            activeBtn.classList.add('bg-blue-600', 'text-white', 'border-blue-500');
+
+            const singleInputs = document.getElementById('single-site-inputs');
+            const countLabel = document.getElementById('count-label');
+
+            if (mode === 'batch') {
+                singleInputs.classList.add('hidden');
+                countLabel.innerText = "Total Batch Limit";
+            } else {
+                singleInputs.classList.remove('hidden');
+                countLabel.innerText = mode === 'new' ? "New Items Target" : "Items to Scrape";
+            }
+        }
+
+        function updateCategories() {
+            const site = document.getElementById('site-select').value;
+            const catSelect = document.getElementById('category-select');
+            catSelect.innerHTML = '';
+            (categories[site] || []).forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.innerText = cat.toUpperCase();
+                catSelect.appendChild(opt);
+            });
+        }
+
+        document.getElementById('site-select').addEventListener('change', updateCategories);
+        updateCategories(); // Init
+
+        // --- Chart Initialization ---
+        function initChart() {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            categoryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            '#3b82f6', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b', '#ef4444',
+                            '#6366f1', '#14b8a6', '#f97316', '#84cc16', '#06b6d4', '#d946ef'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { color: '#9ca3af', boxWidth: 10, font: { size: 10 } }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+        initChart();
+
+        // --- API Interaction ---
+        const API_BASE = '/api/control';
+
+        async function startScraper() {
+            const site = document.getElementById('site-select').value;
+            const category = document.getElementById('category-select').value;
+            const count = document.getElementById('target-count').value;
+
+            const payload = {
+                mode: currentMode,
+                site: site,
+                category: category,
+                count: parseInt(count) || 100
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/start`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (data.status === 'started') {
+                    setRunningState(true);
+                    log("System: Scraper started successfully.");
+                } else {
+                    log(`System Error: ${data.message}`);
+                }
+            } catch (e) {
+                log(`Network Error: ${e.message}`);
+            }
+        }
+
+        async function stopScraper() {
+            try {
+                const res = await fetch(`${API_BASE}/stop`, { method: 'POST' });
+                const data = await res.json();
+                log("System: Stop signal sent.");
+                setRunningState(false);
+            } catch (e) {
+                log(`Error stopping: ${e.message}`);
+            }
+        }
+
+        async function fetchLogs() {
+            if (!isRunning) return;
+            try {
+                const res = await fetch(`${API_BASE}/logs`);
+                const data = await res.json();
+                if (data.logs && data.logs.length > 0) {
+                    data.logs.forEach(line => log(line, false));
+                }
+                if (data.status === 'idle' && isRunning) {
+                    setRunningState(false);
+                    log("System: Process finished.");
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function fetchStats() {
+            try {
+                const res = await fetch('/api/dashboard/summary');
+                const data = await res.json();
+
+                // Update Global Stats
+                document.getElementById('stat-total').innerText = data.totalProductsScanned;
+                document.getElementById('stat-new').innerText = data.newProductsScanned;
+
+                // Update Platform Stats
+                const platformContainer = document.getElementById('platform-stats');
+                platformContainer.innerHTML = '';
+
+                // Calculate max for progress bar
+                const maxVal = Math.max(...Object.values(data.platformWiseScans), 1);
+
+                for (const [site, count] of Object.entries(data.platformWiseScans)) {
+                    const width = (count / maxVal) * 100;
+                    const html = `
+                        <div class="flex items-center justify-between text-sm mb-1">
+                            <span class="capitalize text-gray-300">${site}</span>
+                            <span class="font-bold text-white">${count}</span>
+                        </div>
+                        <div class="w-full bg-gray-800 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: ${width}%"></div>
+                        </div>
+                    `;
+                    const div = document.createElement('div');
+                    div.innerHTML = html;
+                    platformContainer.appendChild(div);
+                }
+
+                // Update Chart
+                if (categoryChart) {
+                    const labels = Object.keys(data.categoryPercentages);
+                    const values = Object.values(data.categoryPercentages);
+
+                    // Only update if data changed to avoid animation flicker
+                    if (JSON.stringify(categoryChart.data.labels) !== JSON.stringify(labels) ||
+                        JSON.stringify(categoryChart.data.datasets[0].data) !== JSON.stringify(values)) {
+
+                        categoryChart.data.labels = labels;
+                        categoryChart.data.datasets[0].data = values;
+                        categoryChart.update();
+                    }
+                }
+
+            } catch (e) { }
+        }
+
+        // --- UI Helpers ---
+        function setRunningState(running) {
+            isRunning = running;
+            const startBtn = document.getElementById('start-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            const statusBadge = document.getElementById('status-badge');
+
+            if (running) {
+                startBtn.disabled = true;
+                startBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                stopBtn.disabled = false;
+                stopBtn.classList.remove('bg-red-900/50', 'text-gray-500', 'cursor-not-allowed');
+                stopBtn.classList.add('bg-red-600', 'text-white', 'hover:bg-red-500');
+
+                statusBadge.innerText = "Running";
+                statusBadge.classList.remove('bg-gray-800', 'text-gray-400');
+                statusBadge.classList.add('bg-green-900', 'text-green-400', 'border-green-700');
+
+                logInterval = setInterval(fetchLogs, 1000);
+            } else {
+                startBtn.disabled = false;
+                startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                stopBtn.disabled = true;
+                stopBtn.classList.add('bg-red-900/50', 'text-gray-500', 'cursor-not-allowed');
+                stopBtn.classList.remove('bg-red-600', 'text-white', 'hover:bg-red-500');
+
+                statusBadge.innerText = "System Idle";
+                statusBadge.classList.add('bg-gray-800', 'text-gray-400');
+                statusBadge.classList.remove('bg-green-900', 'text-green-400', 'border-green-700');
+
+                if (logInterval) clearInterval(logInterval);
+            }
+        }
+
+        function log(msg, timestamp = true) {
+            const term = document.getElementById('terminal-output');
+            const line = document.createElement('div');
+            const time = timestamp ? `[${new Date().toLocaleTimeString()}] ` : '';
+            line.innerText = `${time}${msg}`;
+            term.appendChild(line);
+            term.scrollTop = term.scrollHeight;
+        }
+
+        function clearLogs() {
+            document.getElementById('terminal-output').innerHTML = '';
+        }
+
+        // Init
+        setInterval(fetchStats, 5000);
+        fetchStats();
+    </script>
+</body>
+
+</html>

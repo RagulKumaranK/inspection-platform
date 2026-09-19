@@ -1,7 +1,7 @@
 # Backend Integration Report
 
 ## Overview
-This document outlines the integration points for the "SafeSecure" GovTech application. It details the frontend components that require backend data, the expected API endpoints, and the data structures needed.
+This document outlines the integration points for the Product Compliance Inspection Platform. It details the frontend components that require backend data, the expected API endpoints, and the data structures needed.
 
 **Note to Backend Team:**
 - All frontend code contains comments starting with `// BACKEND INTEGRATION:` to guide you to the exact lines requiring changes.
@@ -13,7 +13,7 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
 ## 1. Authentication Module
 
 ### Login Page
-- **File:** [src/pages/auth/LoginPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/LoginPage.jsx)
+- **File:** [src/pages/auth/LoginPage.jsx](src/pages/auth/LoginPage.jsx)
 - **Action:** User Login
 - **Endpoint:** `POST /api/auth/login`
 - **Payload:**
@@ -34,7 +34,7 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
   ```
 
 ### OTP Verification
-- **File:** [src/pages/auth/OTPPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/OTPPage.jsx)
+- **File:** [src/pages/auth/OTPPage.jsx](src/pages/auth/OTPPage.jsx)
 - **Action:** Verify OTP
 - **Endpoint:** `POST /api/auth/verify`
 - **Payload:**
@@ -54,7 +54,7 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
   ```
 
 ### Resend OTP
-- **File:** [src/pages/auth/OTPPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/OTPPage.jsx)
+- **File:** [src/pages/auth/OTPPage.jsx](src/pages/auth/OTPPage.jsx)
 - **Action:** Resend OTP
 - **Endpoint:** `POST /api/auth/resend-otp`
 - **Payload:** `{ "userId": "user_12345" }`
@@ -64,11 +64,11 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
 ## 2. Officer Dashboard
 
 ### Main Dashboard
-- **File:** [src/pages/officer/OfficerDashboard.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/OfficerDashboard.jsx)
+- **File:** [src/pages/officer/OfficerDashboard.jsx](src/pages/officer/OfficerDashboard.jsx)
 - **Description:** Container for dashboard widgets. Data fetching happens in child components.
 
 ### KPI Stats
-- **Component:** [src/components/dashboard/DashboardStats.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/components/dashboard/DashboardStats.jsx)
+- **Component:** [src/components/dashboard/DashboardStats.jsx](src/components/dashboard/DashboardStats.jsx)
 - **Endpoint:** `GET /api/dashboard/stats`
 - **Response:**
   ```json
@@ -81,7 +81,7 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
   ```
 
 ### Compliance Heatmap
-- **Component:** [src/components/dashboard/heatmap/ComplianceHeatmap.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/components/dashboard/heatmap/ComplianceHeatmap.jsx)
+- **Component:** [src/components/dashboard/heatmap/ComplianceHeatmap.jsx](src/components/dashboard/heatmap/ComplianceHeatmap.jsx)
 - **Endpoint:** `GET /api/dashboard/heatmap`
 - **Response:**
   ```json
@@ -96,7 +96,7 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
 ## 3. Scan Product Module
 
 ### Scan Product Page
-- **File:** [src/pages/officer/ScanProductPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/ScanProductPage.jsx)
+- **File:** [src/pages/officer/ScanProductPage.jsx](src/pages/officer/ScanProductPage.jsx)
 
 ### AI Compliance Analysis
 - **Action:** Analyze scanned product image/barcode
@@ -140,7 +140,7 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
 ## 4. Report Generation (Violation Records)
 
 ### Report Page
-- **File:** [src/pages/officer/ReportGenerationPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/ReportGenerationPage.jsx)
+- **File:** [src/pages/officer/ReportGenerationPage.jsx](src/pages/officer/ReportGenerationPage.jsx)
 
 ### Fetch Violations
 - **Action:** Load violation records table
@@ -182,8 +182,8 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
 ## 5. Platform Analytics
 
 ### Analytics Page
-- **File:** [src/pages/officer/PlatformAnalyticsPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/PlatformAnalyticsPage.jsx)
-- **Component:** [src/components/dashboard/PlatformAnalytics.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/components/dashboard/PlatformAnalytics.jsx)
+- **File:** [src/pages/officer/PlatformAnalyticsPage.jsx](src/pages/officer/PlatformAnalyticsPage.jsx)
+- **Component:** [src/components/dashboard/PlatformAnalytics.jsx](src/components/dashboard/PlatformAnalytics.jsx)
 - **Endpoint:** `GET /api/analytics/platforms`
 - **Response:**
   ```json
@@ -196,7 +196,7 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
   ```
 
 ### Scraper Configuration
-- **Component:** [src/components/dashboard/ScanningConfiguration.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/components/dashboard/ScanningConfiguration.jsx)
+- **Component:** [src/components/dashboard/ScanningConfiguration.jsx](src/components/dashboard/ScanningConfiguration.jsx)
 - **Action:** Update scraper settings
 - **Endpoint:** `POST /api/config/scraper`
 - **Payload:** `{ "targetUrl": "...", "frequency": "daily" }`
@@ -206,9 +206,9 @@ This document outlines the integration points for the "SafeSecure" GovTech appli
 ## Summary of Key Files
 | Feature | File Path |
 | :--- | :--- |
-| **Login** | [src/pages/auth/LoginPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/LoginPage.jsx) |
-| **OTP** | [src/pages/auth/OTPPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/auth/OTPPage.jsx) |
-| **Dashboard** | [src/pages/officer/OfficerDashboard.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/OfficerDashboard.jsx) |
-| **Scanning** | [src/pages/officer/ScanProductPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/ScanProductPage.jsx) |
-| **Reports** | [src/pages/officer/ReportGenerationPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/ReportGenerationPage.jsx) |
-| **Analytics** | [src/pages/officer/PlatformAnalyticsPage.jsx](file:///d:/SIH%20Finalist/Project%20SIH/Frontend/src/pages/officer/PlatformAnalyticsPage.jsx) |
+| **Login** | [src/pages/auth/LoginPage.jsx](src/pages/auth/LoginPage.jsx) |
+| **OTP** | [src/pages/auth/OTPPage.jsx](src/pages/auth/OTPPage.jsx) |
+| **Dashboard** | [src/pages/officer/OfficerDashboard.jsx](src/pages/officer/OfficerDashboard.jsx) |
+| **Scanning** | [src/pages/officer/ScanProductPage.jsx](src/pages/officer/ScanProductPage.jsx) |
+| **Reports** | [src/pages/officer/ReportGenerationPage.jsx](src/pages/officer/ReportGenerationPage.jsx) |
+| **Analytics** | [src/pages/officer/PlatformAnalyticsPage.jsx](src/pages/officer/PlatformAnalyticsPage.jsx) |

@@ -103,8 +103,8 @@ const DownloadExtensionPage = () => {
     ];
 
     const specifications = [
-        { label: 'System Name', value: 'Legal Metrology Compliance System' },
-        { label: 'Extension Title', value: 'Legal Metrology Extension (v1.0.0)' },
+        { label: 'System Name', value: 'Product Compliance Inspection Platform' },
+        { label: 'Extension Title', value: 'Product Declaration Inspection Extension (v1.0.0)' },
         { label: 'Manifest Version', value: 'Chrome Manifest V3' },
         { label: 'Compliance Scope', value: 'Legal Metrology (Packaged Commodities) Rules, 2011 & 2026 Amendments' },
         { label: 'OCR Engine', value: 'Tesseract WebAssembly Client-Side Engine' },
@@ -120,17 +120,17 @@ const DownloadExtensionPage = () => {
                     <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-2.5">
                             <h1 className="text-xl tablet8:text-2xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
-                                Legal Metrology Compliance Extension
+                                Product Declaration Inspection Extension
                             </h1>
                             <span className="px-2.5 py-0.5 text-xs font-semibold bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 border border-primary-200 dark:border-primary-800 rounded-full">
                                 v1.0.0
                             </span>
                             <span className="px-2.5 py-0.5 text-xs font-semibold bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 rounded-full flex items-center gap-1">
-                                <ShieldCheck className="w-3.5 h-3.5" /> Official Government Tool
+                                <ShieldCheck className="w-3.5 h-3.5" /> Verified Inspection Tool
                             </span>
                         </div>
                         <p className="text-xs tablet8:text-sm text-gray-600 dark:text-gray-300">
-                            Real-time e-commerce product listing inspector for Legal Metrology enforcement officers.
+                            Real-time e-commerce product listing inspector for compliance officers.
                         </p>
                     </div>
 

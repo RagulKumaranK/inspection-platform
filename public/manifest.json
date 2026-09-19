@@ -1,7 +1,7 @@
 {
-  "name": "Legal Metrology Compliance System",
-  "short_name": "LegalMetro",
-  "description": "Automated Legal Metrology Compliance Inspection Platform for Government Officers",
+  "name": "Product Compliance Inspection Platform",
+  "short_name": "ComplianceInspector",
+  "description": "Automated Product Compliance Inspection Platform and Declaration Analysis System",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",

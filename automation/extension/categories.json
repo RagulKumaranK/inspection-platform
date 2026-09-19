@@ -1,0 +1,36 @@
+{
+    "amazon": {
+        "groc": "https://www.amazon.in/s?i=grocery&rh=n:2454178031",
+        "beauty": "https://www.amazon.in/s?i=beauty&rh=n:1350384031",
+        "home": "https://www.amazon.in/s?i=kitchen&rh=n:976442031",
+        "elec": "https://www.amazon.in/s?i=electronics&rh=n:976392031",
+        "fashion": "https://www.amazon.in/s?i=fashion&rh=n:1571271031"
+    },
+    "flipkart": {
+        "groc": "https://www.flipkart.com/food-products/pr?sid=eat",
+        "beauty": "https://www.flipkart.com/beauty-and-grooming/pr?sid=g9b",
+        "home": "https://www.flipkart.com/home-furnishing/pr?sid=jra",
+        "elec": "https://www.flipkart.com/audio-video/pr?sid=0pm",
+        "fashion": "https://www.flipkart.com/clothing-and-accessories/topwear/pr?sid=clo,ash"
+    },
+    "jiomart": {
+        "groc": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/28997",
+        "beauty": "https://www.jiomart.com/c/groceries/beauty/6607",
+        "home": "https://www.jiomart.com/c/groceries/home/36",
+        "dairy": "https://www.jiomart.com/c/groceries/dairy-bakery/61",
+        "care": "https://www.jiomart.com/c/groceries/personal-care/91"
+    },
+    "myntra": {
+        "gourmet": "https://www.myntra.com/gourmet?src=bc",
+        "skin": "https://www.myntra.com/beauty-page-skincare-bath-body",
+        "makeup": "https://www.myntra.com/makeup",
+        "hair": "https://www.myntra.com/hair",
+        "frag": "https://www.myntra.com/fragrance"
+    },
+    "batch_urls": {
+        "amz_new": "https://www.amazon.in/gp/new-releases/?ref_=nav_em_cs_newreleases_0_1_1_3",
+        "fk_new": "https://www.flipkart.com/search?q=new%20products",
+        "jm_new": "https://www.jiomart.com/search?q=new%20arrivals",
+        "myn_new": "https://www.myntra.com/new-arrivals"
+    }
+}

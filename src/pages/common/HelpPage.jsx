@@ -14,7 +14,7 @@ const HelpPage = () => {
                 </h1>
 
                 <p className="text-lg font-medium text-gray-600 dark:text-gray-400">
-                    We are team SafeSecure 🙂
+                    Product Compliance Inspection & Declaration Analysis System
                 </p>
             </div>
         </div>

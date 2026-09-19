@@ -90,7 +90,7 @@ const ReportGenerationPage = () => {
 
         // Generate clean text/CSV format for download demo
         const reportContent = `
-LEGAL METROLOGY COMPLIANCE REPORT
+PRODUCT COMPLIANCE INSPECTION REPORT
 ----------------------------------
 Report ID: ${report.id}
 Product: ${report.productName}
@@ -107,7 +107,7 @@ ${report.extractedDeclarations.map(d => `- ${d.name}: ${d.extracted} [Rule: ${d.
 VERIFICATION LINK:
 ${report.verificationQrCode}
 ----------------------------------
-Government of India • Legal Metrology Directorate
+Product Compliance Inspection Platform • Compliance Directorate
         `.trim();
 
         const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
@@ -187,7 +187,7 @@ Government of India • Legal Metrology Directorate
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2.5">
                             <FileText className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                            <span>Legal Metrology Inspection Reports</span>
+                            <span>Product Compliance Inspection Reports</span>
                         </h1>
                         <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
                             Showing complete database of <span className="font-bold text-gray-900 dark:text-white">{totalCount} official inspection records</span>.

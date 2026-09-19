@@ -30,12 +30,12 @@ const AuthLayout = ({ children, title, subtitle }) => {
                     <div className="inline-flex items-center justify-center mb-4">
                         <img
                             src={logoImg}
-                            alt="Legal Metrology Logo"
+                            alt="Compliance Platform Logo"
                             className="w-32 h-32 tablet8:w-40 tablet8:h-40 object-contain"
                         />
                     </div>
                     <h1 className="text-2xl tablet8:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                        {title || 'Government Portal'}
+                        {title || 'Inspection Portal'}
                     </h1>
                     {subtitle && (
                         <p className="text-sm tablet8:text-base text-gray-600 dark:text-gray-400">
@@ -51,7 +51,7 @@ const AuthLayout = ({ children, title, subtitle }) => {
 
                 {/* Footer */}
                 <p className="text-center text-xs tablet8:text-sm text-gray-500 dark:text-gray-400 mt-6">
-                    Secure Government Authentication System
+                    Secure Compliance Inspection Authentication System
                 </p>
             </div>
         </div>
